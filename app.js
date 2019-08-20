@@ -1,10 +1,14 @@
 window.onload = () => {
+  if (localStorage.getItem("cities")) {
+    displaySavedCities();
+  }
+
   getWeather("Skopje");
   getForecast("Skopje");
 };
 
 document.querySelector(".input").addEventListener("keyup", function(e) {
-  let textInput = "Skopje";
+  let textInput = "";
   if (e.code === "Enter") {
     textInput = document.querySelector(".input").value;
 
@@ -18,7 +22,7 @@ async function getWeather(textInput) {
   const api_url = `https://api.openweathermap.org/data/2.5/weather?q=${textInput}&APPID=b60f06be8a1cf3685899ba2249887706`;
   const response = await fetch(api_url);
   const data = await response.json();
-  console.log(data);
+
   if (data.cod != 200) {
     return alert(data.message);
   }
@@ -84,7 +88,7 @@ async function getForecast(textInput) {
   if (data.cod != 200) {
     return alert(data.message);
   }
-  console.log(data);
+
   let dates = {};
   let dateArr = [];
   data.list.map(function(item) {
@@ -96,19 +100,15 @@ async function getForecast(textInput) {
       }
     }
   });
-  console.log(dateArr);
+
   var daysInWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   dateArr.map((item, index) => {
     let tempRounded = Math.round(item.main.temp - 273.15);
     let dayInWeek = new Date(item["dt_txt"].split(" ")[0]).getDay();
-    console.log(daysInWeek[dayInWeek]);
+
     document.getElementById(`day${index}`).textContent = daysInWeek[dayInWeek];
     document.getElementById(`temp${index}`).textContent = `${tempRounded}°`;
   });
-}
-
-function showNextDays() {
-  const days = ["Mon", "Tue"];
 }
 
 function calcTime(offset) {
@@ -119,4 +119,60 @@ function calcTime(offset) {
   const nd = new Date(utc + 3600000 * offset);
 
   return nd.getHours();
+}
+
+// Event Listener on ADD FAVOURITE button
+document.getElementById("heading").addEventListener("click", () => {
+  // add city on UI
+  let cityName = document.querySelector(".city").textContent;
+  const cityList = document.querySelector("#fav-city");
+  const city = document.createElement("div");
+  let cities = localStorage.getItem("cities");
+  cities = cities ? cities.split(",") : [];
+  cityName = cityName.slice(0, cityName.lastIndexOf(","));
+  if (cities.indexOf(cityName) > -1 || cities.length === 4) return;
+
+  city.innerHTML = `<div class="fav-city">${cityName}<i><img class="del-icon" src="/delete-icon.png" alt="del"/></i></div>`;
+  cityList.appendChild(city);
+  // save to LOCAL STORAGE
+
+  cities.push(cityName);
+  localStorage.setItem("cities", cities.join(","));
+
+  console.log(cities.length);
+});
+
+// Event Listener on DELETE ICON button
+
+document.body.addEventListener("click", e => {
+  if (e.target.className === "del-icon") {
+    const element = e.target.parentElement.parentElement;
+    element.remove();
+    citiesArr = localStorage.getItem("cities").split(",");
+    console.log(citiesArr);
+    // for (let i = 0; i < citiesArr.length; i++) {
+    //   if (citiesArr[i] === element.textContent) {
+    //     console.log(citiesArr[i]);
+    //     citiesArr.splice(i, 1);
+    //   }
+    // }
+    localStorage.setItem(
+      "cities",
+      citiesArr.filter(city => city !== element.textContent).join(",")
+    );
+    console.log(citiesArr);
+  }
+});
+
+// display LOCAL STORAGE ON UI
+function displaySavedCities() {
+  let citiesArr = localStorage.getItem("cities").split(",");
+  for (let i = 0; i < citiesArr.length; i++) {
+    const cityList = document.querySelector("#fav-city");
+    const city = document.createElement("div");
+    city.innerHTML = `<div class="fav-city">${
+      citiesArr[i]
+    }<i><img class="del-icon" src="/delete-icon.png" alt="del"/></i></div>`;
+    cityList.appendChild(city);
+  }
 }

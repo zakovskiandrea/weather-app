@@ -11,7 +11,11 @@
       integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
       crossorigin="anonymous"
     />
-    <title>Andrea</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Cinzel|Permanent+Marker|Quicksand|Rajdhani&display=swap"
+      rel="stylesheet"
+    />
+    <title>Weather app</title>
   </head>
 
   <body>
@@ -46,8 +50,45 @@
       </div>
 
       <div class="right-container">
-        <div class="div-input">
-          <input class="input" type="text" placeholder="Skopje, Macedonia" />
+        <div id="upper-container">
+          <div id="favourites-container">
+            <div id="heading">
+              <img id="fav-img" src="/favourites-icon.png" alt="favourite" />
+              <div class="title">Add Favourite</div>
+            </div>
+            <ul id="fav-city">
+              <!-- <div class="fav-city">
+                Melbourne
+                <i><img class="del-icon" src="/delete-icon.png" alt="del"/></i>
+              </div>
+              <div class="fav-city">
+                Moscow
+                <i><img class="del-icon" src="/delete-icon.png" alt="del"/></i>
+              </div>
+              <div class="fav-city">
+                Liverpool
+                <i><img class="del-icon" src="/delete-icon.png" alt="del"/></i>
+              </div>
+              <div class="fav-city">
+                London
+                <i><img class="del-icon" src="/delete-icon.png" alt="del"/></i>
+              </div> -->
+            </ul>
+          </div>
+        </div>
+        <div id="lower-container">
+          <div id="input-wrapper">
+            <div class="loc-icon">
+              <img id="location-icon" src="/location_icon.png" alt="location" />
+            </div>
+            <div class="div-input">
+              <input
+                class="input"
+                type="text"
+                placeholder="Skopje, Macedonia"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
