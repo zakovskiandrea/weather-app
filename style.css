@@ -201,4 +201,7 @@ li {
   .fav-city {
     flex-basis: 50%;
   }
+  .part-of-day {
+    margin-bottom: 10px;
+  }
 }
