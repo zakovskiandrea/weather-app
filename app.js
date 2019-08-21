@@ -6,7 +6,7 @@ window.onload = () => {
   getWeather("Skopje");
   getForecast("Skopje");
 };
-
+// Event Listener on ENTER key
 document.querySelector(".input").addEventListener("keyup", function(e) {
   let textInput = "";
   if (e.code === "Enter") {
@@ -14,6 +14,71 @@ document.querySelector(".input").addEventListener("keyup", function(e) {
 
     getWeather(textInput);
     getForecast(textInput);
+  }
+});
+
+// Event Listener on ADD FAVOURITE button
+document.getElementById("heading").addEventListener("click", () => {
+  // add city on UI
+  let cityName = document.querySelector(".city").textContent;
+  const cityList = document.querySelector("#fav-city");
+  const city = document.createElement("div");
+  city.className = "fav-city";
+  let cities = localStorage.getItem("cities");
+  cities = cities ? cities.split(",") : [];
+  cityName = cityName.slice(0, cityName.lastIndexOf(","));
+  if (cities.indexOf(cityName) > -1 || cities.length === 4) return;
+
+  city.innerHTML = `${cityName}<i><img class="del-icon" src="/delete-icon.png" alt="del"/></i>`;
+  cityList.appendChild(city);
+  // save to LOCAL STORAGE
+
+  cities.push(cityName);
+  localStorage.setItem("cities", cities.join(","));
+
+  console.log(cities.length);
+});
+
+// Event Listener on DELETE ICON button
+
+document.body.addEventListener("click", e => {
+  if (e.target.className === "del-icon") {
+    const element = e.target.parentElement.parentElement;
+    element.remove();
+    citiesArr = localStorage.getItem("cities").split(",");
+
+    // for (let i = 0; i < citiesArr.length; i++) {
+    //   if (citiesArr[i] === element.textContent) {
+    //     console.log(citiesArr[i]);
+    //     citiesArr.splice(i, 1);
+    //   }
+    // }
+    localStorage.setItem(
+      "cities",
+      citiesArr.filter(city => city !== element.textContent).join(",")
+    );
+  }
+});
+
+// display LOCAL STORAGE ON UI
+function displaySavedCities() {
+  let citiesArr = localStorage.getItem("cities").split(",");
+  for (let i = 0; i < citiesArr.length; i++) {
+    const cityList = document.querySelector("#fav-city");
+    const city = document.createElement("div");
+    city.className = "fav-city";
+    city.innerHTML = `${
+      citiesArr[i]
+    }<i><img class="del-icon" src="/delete-icon.png" alt="del"/></i>`;
+    cityList.appendChild(city);
+  }
+}
+
+//Event Listener on FAV CITY
+document.body.addEventListener("click", e => {
+  const city = e.target.textContent;
+  if (e.target.className === "fav-city") {
+    getWeather(city);
   }
 });
 
@@ -119,60 +184,4 @@ function calcTime(offset) {
   const nd = new Date(utc + 3600000 * offset);
 
   return nd.getHours();
-}
-
-// Event Listener on ADD FAVOURITE button
-document.getElementById("heading").addEventListener("click", () => {
-  // add city on UI
-  let cityName = document.querySelector(".city").textContent;
-  const cityList = document.querySelector("#fav-city");
-  const city = document.createElement("div");
-  let cities = localStorage.getItem("cities");
-  cities = cities ? cities.split(",") : [];
-  cityName = cityName.slice(0, cityName.lastIndexOf(","));
-  if (cities.indexOf(cityName) > -1 || cities.length === 4) return;
-
-  city.innerHTML = `<div class="fav-city">${cityName}<i><img class="del-icon" src="/delete-icon.png" alt="del"/></i></div>`;
-  cityList.appendChild(city);
-  // save to LOCAL STORAGE
-
-  cities.push(cityName);
-  localStorage.setItem("cities", cities.join(","));
-
-  console.log(cities.length);
-});
-
-// Event Listener on DELETE ICON button
-
-document.body.addEventListener("click", e => {
-  if (e.target.className === "del-icon") {
-    const element = e.target.parentElement.parentElement;
-    element.remove();
-    citiesArr = localStorage.getItem("cities").split(",");
-    console.log(citiesArr);
-    // for (let i = 0; i < citiesArr.length; i++) {
-    //   if (citiesArr[i] === element.textContent) {
-    //     console.log(citiesArr[i]);
-    //     citiesArr.splice(i, 1);
-    //   }
-    // }
-    localStorage.setItem(
-      "cities",
-      citiesArr.filter(city => city !== element.textContent).join(",")
-    );
-    console.log(citiesArr);
-  }
-});
-
-// display LOCAL STORAGE ON UI
-function displaySavedCities() {
-  let citiesArr = localStorage.getItem("cities").split(",");
-  for (let i = 0; i < citiesArr.length; i++) {
-    const cityList = document.querySelector("#fav-city");
-    const city = document.createElement("div");
-    city.innerHTML = `<div class="fav-city">${
-      citiesArr[i]
-    }<i><img class="del-icon" src="/delete-icon.png" alt="del"/></i></div>`;
-    cityList.appendChild(city);
-  }
 }

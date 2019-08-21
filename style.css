@@ -164,7 +164,7 @@ li {
 }
 
 #favourites-container {
-  width: 50%;
+  /* width: 50%; */
   min-width: 235px;
 }
 
@@ -175,6 +175,7 @@ li {
 .fav-city {
   font-family: "Alegreya Sans SC", sans-serif;
   color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
 }
 
 .fav-city > i {
@@ -188,5 +189,16 @@ li {
   }
   .right-container {
     flex: 0.7;
+  }
+  #favourites-container {
+    flex: 1;
+  }
+  #fav-city {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .fav-city {
+    flex-basis: 50%;
   }
 }
